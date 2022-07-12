@@ -1,0 +1,48 @@
+# ----------------------------------------
+#  Getting started
+# ----------------------------------------
+# Create a container in detached mode (-d) and (-p) map port 80 of host to port 80 of container.
+# This automatically downloads an image and starts a container.
+# A container is just another process on the host that is isolated.
+# A container image is the filesystem that is used to run a container.
+# Use docker desktop to monitor status of containers and images.
+docker run -d -p 80:80 docker/getting-started
+
+# If the Docker daemon is not running, open Powershell with Admin privileges and execute
+& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchDaemon
+
+# Change location where docker stores container images.
+https://stackoverflow.com/questions/62441307/how-can-i-change-the-location-of-docker-images-when-using-docker-desktop-on-wsl2
+
+# ----------------------------------------
+#  Creating your own image
+# ----------------------------------------
+# Sample to do list app is located here:
+http://localhost/assets/app.zip
+
+# A Dockerfile is a list of text instructions on how to construct an image.
+# Create Dockerfile in directory containing application.
+# Build a container called getting-started and use the Dockerfile in this directory.
+docker build -t getting-started .
+
+# Run the image
+docker run -dp 3000:3000 getting-started
+
+# ----------------------------------------
+#  Managing containers
+# ----------------------------------------
+# List all running containers
+docker ps
+
+# Kill a container
+docker rm container-id -force
+
+# Create a volume
+docker volume create db
+
+# Run while mounting a volume
+docker run -dp 3000:3000 -v volume-name:/path/to/mount getting-started
+
+# Inspect a volume
+# On a windows system, it is stored in \\wsl$\docker-desktop-data\data\docker\volumes
+docker volume inspect volume-name
