@@ -37,11 +37,24 @@ docker ps
 # Kill a container
 docker rm container-id -force
 
+# Inspect container logs
+docker logs -f container-id
+
+# Start bash temrinal for container
+docker exec -it container-id bash
+docker exec -it container-id sh
+
+# ----------------------------------------
+#  Volumes and persisting container data
+# ----------------------------------------
+# Volumes connect a part of the container filesystem to the host machine's file system.
+# It is used to persist data that is created/updated/deleted on the container.
 # Create a volume
 docker volume create db
 
 # Run while mounting a volume (named volume)
 docker run -dp 3000:3000 -v volume-name:/path/to/mount getting-started
+docker run -dp 3000:3000 -v db:/etc/todos getting-started
 
 # Inspect a volume
 # On a windows system, it is stored in \\wsl$\docker-desktop-data\data\docker\volumes
@@ -50,10 +63,8 @@ docker volume inspect volume-name
 # -w sets working directory of container
 # -v "/path/to/source/data:/path/to/mount" specifies the source and destination paths of the bind mount.
 # node:12-alpine is the image.
+# The following command is used to setup a development container to develop node.js applications
 docker run -dp 3000:3000 `
     -w /app -v "$(pwd):/app" `
     node:12-alpine `
     sh -c "yarn install && yarn run dev"
-
-# Inspect container logs
-docker logs -f container-id
