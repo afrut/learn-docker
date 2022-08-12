@@ -53,8 +53,11 @@ docker image pull apache/spark
 # List all running containers
 docker ps
 
-# Kill a container
+# Remove a container
 docker rm container-id -force
+
+# Kill a container
+docker kill container-id
 
 # Inspect container logs
 docker logs -f container-id
@@ -87,3 +90,18 @@ docker run -dp 3000:3000 `
     -w /app -v "$(pwd):/app" `
     node:12-alpine `
     sh -c "yarn install && yarn run dev"
+
+# ----------------------------------------
+#  Managing volumes
+# ----------------------------------------
+# List all volumes
+docker volume ls
+
+# Remove volume with volume id volume-id
+docker volume rm volume-id
+
+# Delete all volumes not currently being referenced by any containers
+docker volume prune
+
+# Find the container currently referencing a volume with volume id volume-id
+docker container ls -a --filter volume=volume-id
