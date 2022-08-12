@@ -22,11 +22,30 @@ http://localhost/assets/app.zip
 
 # A Dockerfile is a list of text instructions on how to construct an image.
 # Create Dockerfile in directory containing application.
-# Build a container called getting-started and use the Dockerfile in this directory.
-docker build -t getting-started .
+# Build a container called todo-app and use the Dockerfile in this directory.
+docker build -t todo-app .
 
 # Run the image
-docker run -dp 3000:3000 getting-started
+docker run -dp 3000:3000 todo-app
+
+# ----------------------------------------
+#  Managing images
+# ----------------------------------------
+# List all images
+docker image ls
+
+# Display detailed information on the image image-id
+docker image inspect image-id
+
+# Remove image-id
+docker image rm image-id
+
+# Create an image named todo-app from the Dockerfile in current directory
+docker image build -t todo-app .
+
+# Pull the apache/spark image from a registry
+# Find images here: https://hub.docker.com/search?q=
+docker image pull apache/spark
 
 # ----------------------------------------
 #  Managing containers
