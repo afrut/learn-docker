@@ -6,24 +6,31 @@ for($cntv = 1; $cntv -lt $volumes_.Length; $cntv++)
     $volumes.Add($volumes_[$cntv].Split(" ")[-1])
 }
 
+$volumes = $volumes.ToArray()
+
 $entries = New-Object Collections.Generic.List[Collections.HashTable]
 $volumes | ForEach-Object {
     # Last line of output from docker container ls is the line of interest
     # Split this line with " "
-    $result = $(docker container ls -a --filter volume=$_)[-1].Split(" ")
-    $ls = New-Object Collections.Generic.List[String]
-    for($cnt = 0; $cnt -lt $result.Length; $cnt++)
-    {
-        if($result[$cnt] -ne ""){
-            $ls.Add($result[$cnt])
-        }
-    }
+    $result = $(docker container ls -a --filter volume=$_)
 
-    $entries.Add(@{"volume-id" = $_
-        ;"container-id" = $ls[0]
-        ;"image-name" = $ls[1]
-        ;"container-name" = $ls[-1]
-    })
+    if($result.GetType() -eq [System.Object[]] -and $result.Length -ge 2)
+    {
+        $result = $result[-1].Split(" ")
+        $ls = New-Object Collections.Generic.List[String]
+        for($cnt = 0; $cnt -lt $result.Length; $cnt++)
+        {
+            if($result[$cnt] -ne ""){
+                    $ls.Add($result[$cnt])
+            }
+        }
+                
+        $entries.Add(@{"volume-id" = $_
+            ;"container-id" = $ls[0]
+            ;"image-name" = $ls[1]
+            ;"container-name" = $ls[-1]
+        })
+    }
 }
 
 Write-Host "volume-id --- container-id --- image-name --- container-name"
