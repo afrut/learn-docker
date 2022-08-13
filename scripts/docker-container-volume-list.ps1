@@ -1,3 +1,4 @@
+# TODO: modify this to use quiet mode (-q) to return only id's.
 $volumes_ = docker volume ls
 $volumes = New-Object Collections.Generic.List[String]
 for($cntv = 1; $cntv -lt $volumes_.Length; $cntv++)

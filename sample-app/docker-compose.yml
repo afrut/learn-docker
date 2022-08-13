@@ -1,0 +1,56 @@
+# A docker-compose.yml defines all the containers required to run an
+# application. This can be thought of as an application stack. This can be
+# replaced by many repeated calls to docker run with multiple options such as -p
+# -v, -w, -e, etc.
+
+# As per documentation, this does nothing. It is for information only.
+# See https://docs.docker.com/compose/compose-file/#version-top-level-element
+version: "3.7"
+
+# List of containers to run as part of the application.
+services:
+  
+  # Main application. Pick any name. Choose app.
+  # The app entry has similar parallels to the docker run command.
+  # This name is automatically used as the network alias.
+  app:
+
+    # Image to create a container from.
+    image: node:12-alpine
+
+    # Command to run to start the container.
+    command: sh -c "yarn install && yarn run dev"
+
+    # Corresponds to docker run -p.
+    # There is a long syntax here; https://docs.docker.com/compose/compose-file/compose-file-v3/#long-syntax-1
+    ports:
+      - 3000:3000
+
+    # Corresponds to docker run -w.
+    working_dir: /app
+
+    # Corresponds to docker run -v
+    volumes:
+      - ./:/app
+
+    # Corresponds to docker run -e.
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  # The database container. MySQL.
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+# Named volumes need to be defined at the top level.
+# Named volumes can also be configured. Reference:
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#volume-configuration-reference
+volumes:
+  todo-mysql-data:

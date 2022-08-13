@@ -2,6 +2,7 @@
 #  Getting started
 # ----------------------------------------
 # Create a container in detached mode (-d) and (-p) map port 80 of host to port 80 of container.
+# Detached mode means the container runs in the background and doesn't receive input or display output.
 # This automatically downloads an image and starts a container.
 # A container is just another process on the host that is isolated.
 # A container image is the filesystem that is used to run a container.
@@ -50,13 +51,15 @@ docker image pull apache/spark
 # ----------------------------------------
 #  Managing containers
 # ----------------------------------------
-# List all running containers
-docker ps
+# List all running containers. -q returns only container id's.
+docker ps -q
 
-# Remove a container
+# Remove a container. This kills and removes the container so that it doesn't
+# show up on docker ps -a. To run an auto-cleaning container, use the --rm flag.
 docker rm container-id -force
 
-# Kill a container
+# Kill a container. This doesn't remove the container and the container will
+# still show up on docker ps -a.
 docker kill container-id
 
 # Inspect container logs
@@ -65,6 +68,12 @@ docker logs -f container-id
 # Start bash temrinal for container
 docker exec -it container-id bash
 docker exec -it container-id sh
+
+# List all containers regardless of whether they are running.
+docker ps -a
+
+# Remove all containers
+docker rm -f $(docker ps -aq)
 
 # ----------------------------------------
 #  Volumes and persisting container data
@@ -86,6 +95,7 @@ docker volume inspect volume-name
 # -v "/path/to/source/data:/path/to/mount" specifies the source and destination paths of the bind mount.
 # node:12-alpine is the image.
 # The following command is used to setup a development container to develop node.js applications
+# sh -c "yarn install && yarn run dev" is the command to run to start the container.
 docker run -dp 3000:3000 `
     -w /app -v "$(pwd):/app" `
     node:12-alpine `
@@ -164,3 +174,29 @@ docker network rm network-id
 
 # List all networks
 docker network ls
+
+# ----------------------------------------
+#  Using docker-compose
+# ----------------------------------------
+# docker-comopse is a better way to specify multi-container apps. The
+# specification is a yml file, can be version-controlled, and shared.
+# Check that docker-compose is installed.
+docker-compose version
+
+# See sample-app/docker-compose.yml.
+
+# Run the application stack in detached mode (run in terminal's background).
+docker-compose up -d
+
+# View logs of docker-compose. The logs of all containers are interleaved into a
+- single stream. The follow flag -f gives live output as the logs are generated.
+docker-compose logs -f
+
+# View the log for a specific service (container) run through docker-compose.
+# View for container app.
+docker-compose logs -f app
+
+# To docker rm -f all containers started by docker-compose:
+# This does not remove volumes. Add the --volumes flag to remove volumes when
+# data does not need to be persisted.
+docker-compose down
