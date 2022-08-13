@@ -158,3 +158,9 @@ docker run -dp 3000:3000 `
 # Connect to the MySQL database and validate that data is being written.
 docker exec -it container-id mysql -p todos
 SELECT * FROM todo_items;
+
+# Remove a network.
+docker network rm network-id
+
+# List all networks
+docker network ls
