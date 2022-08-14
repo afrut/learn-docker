@@ -200,3 +200,14 @@ docker-compose logs -f app
 # This does not remove volumes. Add the --volumes flag to remove volumes when
 # data does not need to be persisted.
 docker-compose down
+
+# ----------------------------------------
+#  Go templates
+# ----------------------------------------
+# Many docker commands have the --format flag that can be used to format output.
+# For example, to return only the container id, image name, and container name
+# from docker container ls:
+docker container ls --format "{{.ID}};{{.Image}};{{.Names}}"
+
+# To find out what can be printed:
+docker container ls --format "{{json .}}"
