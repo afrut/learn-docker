@@ -27,7 +27,7 @@ A playarea for Docker.
 
 # Creating your own image
 - Sample to do list app is located here:
-  http://localhost/assets/app.zip
+  https://github.com/docker/getting-started
 
 - Build a container called todo-app and use the Dockerfile in this directory.
   - A Dockerfile is a list of text instructions on how to construct an image.
