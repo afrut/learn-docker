@@ -69,6 +69,19 @@ A playarea for Docker.
   ```
 
 # Managing containers
+- Run a container indefinitely.
+  - By default, a container is terminated when the command it is specified to run terminates.
+  - Use the -t flag to run the container indefinitely. -t starts a pseudo-tty (terminal).
+  - The -d flag can be used to run it in the background.
+  ```
+  docker run -t -d image-id
+  ```
+
+- Run a container indefinitely and interact via a terminal.
+  ```
+  docker run -it image-id
+  ```
+
 - List all running containers. -q returns only container id's.
   ```
   docker ps -q
