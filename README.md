@@ -87,6 +87,11 @@ A playarea for Docker.
   docker ps -q
   ```
 
+- List all containers.
+  ```
+  docker ps -a
+  ```
+
 - Remove a container.
   - This kills and removes the container so that it doesn't show up on `docker ps -a`.
   - To run an auto-cleaning container, use the --rm flag.
