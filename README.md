@@ -96,7 +96,7 @@ A playarea for Docker.
   - This kills and removes the container so that it doesn't show up on `docker ps -a`.
   - To run an auto-cleaning container, use the --rm flag.
   ```
-  docker rm container-id -force
+  docker rm container-id --force
   ```
 
 - Kill a container. This doesn't remove the container and the container will
