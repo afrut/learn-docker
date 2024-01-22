@@ -41,6 +41,11 @@ A playarea for Docker.
   docker run -dp 3000:3000 todo-app
   ```
 
+- Build using a `Dockerfile` at a different location. In the `dev` directory:
+  ```
+  docker build --tag dev --file some_subdir/Dockerfile .
+  ```
+
 # Managing images
 - List all images
   ```
@@ -309,3 +314,6 @@ A playarea for Docker.
 
 # Links
 - [Dockerfile Reference](https://docs.docker.com/engine/reference/builder/)
+- [`docker build`](https://docs.docker.com/engine/reference/commandline/image_build/)
+  - [Build context](https://docs.docker.com/build/building/context/)
+  - [Multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
