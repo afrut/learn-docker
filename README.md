@@ -78,7 +78,6 @@ A playarea for Docker.
   ```
 
 # Managing containers
-- TODO: run a command after starting
 - Run a container indefinitely.
   - By default, a container is terminated when the command it is specified to run terminates.
   - Use the `-t` (`--tty`) flag to run the container indefinitely. `-t` starts a pseudo-tty (terminal).
@@ -96,6 +95,12 @@ A playarea for Docker.
   - `--rm` removes the container after it exits.
   ```
   docker run --name subdir --rm subdir
+  ```
+
+- Run a command started in a container.
+  ```
+  CMD='echo Hello, World'
+  docker run --name subdir --rm subdir $CMD
   ```
 
 - List all running containers. `-q` (`--quiet`) returns only container id's.
