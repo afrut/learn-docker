@@ -4,11 +4,11 @@ A playarea for Docker.
 - Install Docker on Windows: https://docs.docker.com/desktop/install/windows-install/
 
 # Notes
-- Create a container in detached mode (-d) and (-p) map port 80 of host to port 80 of container.
+- Create a container in detached mode (`-d`, `--detach`) and (`-p`, `--publish`) map port 80 of host to port 80 of container.
 - Detached mode means the container runs in the background and doesn't receive input or display output.
 - This automatically downloads an image and starts a container.
 - A container is just another process on the host that is isolated.
-- A container image is the filesystem that is used to run a container.
+- An image contains application code, libraries, tools and other dependencies needed by the application.
 - Use docker desktop to monitor status of containers and images.
 - How to change location where docker stores container images on Windows:
   https://stackoverflow.com/questions/62441307/how-can-i-change-the-location-of-docker-images-when-using-docker-desktop-on-wsl2
@@ -29,11 +29,12 @@ A playarea for Docker.
 - Sample to do list app is located here:
   https://github.com/docker/getting-started
 
-- Build a container called todo-app and use the Dockerfile in this directory.
+- Using the Dockerfile in this directory, build an image called todo-app using `-t` (`--tag`).
   - A Dockerfile is a list of text instructions on how to construct an image.
   - Create Dockerfile in directory containing application.
+  - Last argument is the directory (`"./sample-app"`) containing the build context.
   ```
-  docker build -t todo-app .
+  docker build -t todo-app "./sample-app"
   ```
 
 - Run the image
@@ -45,6 +46,9 @@ A playarea for Docker.
   ```
   docker build --tag dev --file some_subdir/Dockerfile .
   ```
+
+## Multi-stage Builds
+- 
 
 # Managing images
 - List all images
@@ -62,9 +66,9 @@ A playarea for Docker.
   docker image rm image-id
   ```
 
-- Create an image named todo-app from the Dockerfile in current directory
+- Create an image named todo-app from the Dockerfile in the `sample-app` directory.
   ```
-  docker image build -t todo-app .
+  docker image build -t todo-app "./sample-app"
   ```
 
 - Pull the apache/spark image from a registry
@@ -76,30 +80,29 @@ A playarea for Docker.
 # Managing containers
 - Run a container indefinitely.
   - By default, a container is terminated when the command it is specified to run terminates.
-  - Use the -t flag to run the container indefinitely. -t starts a pseudo-tty (terminal).
+  - Use the `-t` (`--tty`) flag to run the container indefinitely. `-t` starts a pseudo-tty (terminal).
   - The -d flag can be used to run it in the background.
   ```
   docker run -t -d image-id
   ```
 
-- Run a container indefinitely and interact via a terminal.
+- Run a container indefinitely and interact via a terminal using `-i` (`--interactive`).
   ```
   docker run -it image-id
   ```
 
-- List all running containers. -q returns only container id's.
+- List all running containers. `-q` (`--quiet`) returns only container id's.
   ```
   docker ps -q
   ```
 
-- List all containers.
+- List all containers regardless of whether they are running using `-a` (`--all`).
   ```
   docker ps -a
   ```
 
 - Remove a container.
   - This kills and removes the container so that it doesn't show up on `docker ps -a`.
-  - To run an auto-cleaning container, use the --rm flag.
   ```
   docker rm container-id --force
   ```
@@ -110,7 +113,12 @@ A playarea for Docker.
   docker kill container-id
   ```
 
-- Inspect container logs
+- Run an container that is removed after it exits using `--rm`.
+  ```
+  docker run --interactive --tty --rm image-id
+  ```
+
+- Stream a container's logs to STDIN and STDERR using `-f` (`--follow`).
   ```
   docker logs -f container-id
   ```
@@ -121,12 +129,7 @@ A playarea for Docker.
   docker exec -it container-id sh
   ```
 
-- List all containers regardless of whether they are running.
-  ```
-  docker ps -a
-  ```
-
-- Remove all containers and associated anonymous volumes
+- Remove all containers and associated anonymous volumes. `-f` (`--force`).
   ```
   docker rm -f $(docker ps -aq)
   ```
