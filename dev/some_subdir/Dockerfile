@@ -1,2 +1,2 @@
-FROM scratch
-CMD ["echo hello"]
+FROM debian:bookworm-slim
+CMD ["echo", "hello"]

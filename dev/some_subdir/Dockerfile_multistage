@@ -1,0 +1,2 @@
+FROM python:slim-bookworm AS venv
+RUN python -m venv .venv

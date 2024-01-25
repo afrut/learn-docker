@@ -44,11 +44,11 @@ A playarea for Docker.
 
 - Build using a `Dockerfile` at a different location. In the `dev` directory:
   ```
-  docker build --tag dev --file some_subdir/Dockerfile .
+  docker build --tag subdir --file some_subdir/Dockerfile .
   ```
 
 ## Multi-stage Builds
-- 
+- TODO: fill up
 
 # Managing images
 - List all images
@@ -78,6 +78,7 @@ A playarea for Docker.
   ```
 
 # Managing containers
+- TODO: run a command after starting
 - Run a container indefinitely.
   - By default, a container is terminated when the command it is specified to run terminates.
   - Use the `-t` (`--tty`) flag to run the container indefinitely. `-t` starts a pseudo-tty (terminal).
@@ -91,6 +92,12 @@ A playarea for Docker.
   docker run -it image-id
   ```
 
+- Run a container and name it using `--name`.
+  - `--rm` removes the container after it exits.
+  ```
+  docker run --name subdir --rm subdir
+  ```
+
 - List all running containers. `-q` (`--quiet`) returns only container id's.
   ```
   docker ps -q
@@ -101,21 +108,21 @@ A playarea for Docker.
   docker ps -a
   ```
 
-- Remove a container.
-  - This kills and removes the container so that it doesn't show up on `docker ps -a`.
-  ```
-  docker rm container-id --force
-  ```
-
 - Kill a container. This doesn't remove the container and the container will
   still show up on `docker ps -a`.
   ```
   docker kill container-id
   ```
 
-- Run an container that is removed after it exits using `--rm`.
+- Kill all running containers. `-q` (`--quiet`) returns only container id's.
   ```
-  docker run --interactive --tty --rm image-id
+  docker kill $(docker ps -q)
+  ```
+
+- Remove a container.
+  - This kills and removes the container so that it doesn't show up on `docker ps -a`.
+  ```
+  docker rm container-id --force
   ```
 
 - Stream a container's logs to STDIN and STDERR using `-f` (`--follow`).
@@ -156,14 +163,25 @@ A playarea for Docker.
   ```
 
 - The following command is used to setup a development container to develop node.js applications
-- `-w` sets working directory of container
-- `-v` "/path/to/source/data:/path/to/mount" specifies the source and destination paths of the bind mount.
+- `-w` (`--workdir`) sets working directory of container
+- `-v` (`--volume`) "/path/to/source/data:/path/to/mount" specifies the source and destination paths of the bind mount.
 - node:12-alpine is the image.
 - sh -c "yarn install && yarn run dev" is the command to run to start the container.
   ```
-  docker run -dp 3000:3000 `
-      -w /app -v "$(pwd):/app" `
-      node:12-alpine `
+  docker run -dp 3000:3000 \
+      -w /app -v "sample-app:/app" \
+      node:12-alpine \
+      sh -c "yarn install && yarn run dev"
+  ```
+
+- Use the `--mount` flag instead of `--volume`. It is more verbose and explicit.
+  - [Reference for `--mount`.](https://docs.docker.com/storage/bind-mounts/)
+  - The `--mount` equivalent of the previous command is:
+  ```
+  docker run --detach --publish 3000:3000 \
+      --workdir /app \
+      --mount type=bind,source="$(realpath ./sample-app)",destination="/app" \
+      node:12-alpine \
       sh -c "yarn install && yarn run dev"
   ```
 
@@ -180,7 +198,7 @@ A playarea for Docker.
 
 - Delete all volumes not currently being referenced by any containers
   ```
-  docker volume prune
+  docker volume prune --force
   ```
 
 - Find the container currently referencing a volume with volume id volume-id
