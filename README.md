@@ -72,9 +72,24 @@ A playarea for Docker.
   ```
 
 - Pull the apache/spark image from a registry
-- Find images here: https://hub.docker.com/search?q=
+  - Find images here: https://hub.docker.com/search?q=
   ```
   docker image pull apache/spark
+  ```
+
+- List images with REPOSITORY or TAG of '<none>'.
+  ```
+  docker image ls | grep "<none>"
+  ```
+
+- List image id's of images with REPOSITORY or TAG of '<none>'.
+  ```
+  docker image ls | grep "<none>" | awk -F ' ' '{print $3}'
+  ```
+
+- Remove images with REPOSITORY or TAG of '<none>'.
+  ```
+  docker image rm $(docker image ls | grep "<none>" | awk -F ' ' '{print $3}')
   ```
 
 # Managing containers
