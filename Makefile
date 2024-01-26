@@ -2,7 +2,7 @@ VOLUME_NAME="db"
 
 all: build run
 
-build: build_todo build_subdir build_singlestage build_multistage dev
+build: build_todo build_subdir build_singlestage build_multistage dev build_build_output
 
 run: run_getting_started run_todo run_subdir run_todo_with_volume dev
 
@@ -58,10 +58,17 @@ build_multistage:
 run_multistage:
 	@docker run --tty --interactive --name multistage --rm multistage
 
+build_build_output:
+	@docker build --tag build_output \
+		--file "./build_output/Dockerfile" \
+		--output type=local,dest="./build_output/out" \
+		"./build_output"
+
 
 
 # Cleaning up
 clean: clean_containers clean_volumes
+	@rm -rf ./build_output/env
 
 kill_all:
 	@docker ps -q | xargs --no-run-if-empty docker kill
