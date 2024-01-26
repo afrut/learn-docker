@@ -2,7 +2,7 @@ VOLUME_NAME="db"
 
 all: build run
 
-build: build_todo build_subdir
+build: build_todo build_subdir build_singlestage build_multistage
 
 run: run_getting_started run_todo run_subdir run_todo_with_volume
 
@@ -35,7 +35,7 @@ run_todo:
 	@docker run -dp 3000:3000 todo-app
 
 build_subdir:
-	@docker build --tag subdir --file dev/some_subdir/Dockerfile "./dev/some_subdir"
+	@docker build --tag subdir --file some_subdir/Dockerfile "./some_subdir"
 
 run_subdir:
 	@docker run --name subdir --rm subdir
@@ -58,14 +58,19 @@ run_multistage:
 clean: clean_containers clean_volumes
 
 kill_all:
-	@docker kill $$(docker ps -q)
+	@docker ps -q | xargs --no-run-if-empty docker kill
 
 clean_containers:
-	@docker rm --force $$(docker ps -aq)
+	@docker ps -aq | xargs --no-run-if-empty docker rm --force
 
 clean_volumes:
 	@docker volume prune --force
 
 clean_images:
-	@docker image rm $$(docker image ls | grep "<none>" | awk -F ' ' '{print $$3}') && \
-	docker image rm $$(docker image ls | grep -P "(todo-app|dev|subdir|node|docker\/getting-started|singlestage|multistage)" | awk -F ' ' '{print $$3}')
+	@docker image ls | grep "<none>" | awk -F ' ' '{print $$3}' \
+		| xargs --no-run-if-empty docker image rm && \
+	docker image ls | grep -P "(todo-app|dev|subdir|node|docker\/getting-started|singlestage|multistage)" \
+		| awk -F ' ' '{print $$3}' | xargs --no-run-if-empty docker image rm
+
+
+# docker image ls | grep -P "(todo-app|dev|subdir|node|docker\/getting-started|singlestage|multistage)" | awk -F ' ' '{print $$3}'
