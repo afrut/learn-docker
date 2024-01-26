@@ -71,6 +71,3 @@ clean_images:
 		| xargs --no-run-if-empty docker image rm && \
 	docker image ls | grep -P "(todo-app|dev|subdir|node|docker\/getting-started|singlestage|multistage)" \
 		| awk -F ' ' '{print $$3}' | xargs --no-run-if-empty docker image rm
-
-
-# docker image ls | grep -P "(todo-app|dev|subdir|node|docker\/getting-started|singlestage|multistage)" | awk -F ' ' '{print $$3}'
