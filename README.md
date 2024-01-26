@@ -131,6 +131,13 @@ A playarea for Docker.
   docker run --name subdir --rm subdir $CMD
   ```
 
+- Run a container with a different entrypoint.
+  - Entrypoints allow the containers to run like an executable.
+  ```
+  docker run -it dev # Will run Python since it is the entrypoint
+  docker run -it --entrypoint "/bin/bash" dev # Will run bash
+  ```
+
 - List all running containers. `-q` (`--quiet`) returns only container id's.
   ```
   docker ps -q

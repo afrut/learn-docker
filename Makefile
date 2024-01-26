@@ -2,9 +2,9 @@ VOLUME_NAME="db"
 
 all: build run
 
-build: build_todo build_subdir build_singlestage build_multistage
+build: build_todo build_subdir build_singlestage build_multistage dev
 
-run: run_getting_started run_todo run_subdir run_todo_with_volume
+run: run_getting_started run_todo run_subdir run_todo_with_volume dev
 
 
 
@@ -33,6 +33,12 @@ build_todo:
 
 run_todo:
 	@docker run -dp 3000:3000 todo-app
+
+build_dev:
+	@docker build --tag dev --file "dev/Dockerfile" "./dev"
+
+run_dev:
+	@docker run --tty --interactive --entrypoint "/bin/bash" dev
 
 build_subdir:
 	@docker build --tag subdir --file some_subdir/Dockerfile "./some_subdir"
