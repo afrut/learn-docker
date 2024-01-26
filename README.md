@@ -48,7 +48,20 @@ A playarea for Docker.
   ```
 
 ## Multi-stage Builds
-- TODO: fill up
+- Multi-stage builds can be used to reduce the final size of images by building
+  all dependencies in one stage, then copying binaries into the final stage.
+- Build both singlestage and multistage. Both images contain Python packages.
+  `singlestage` contains `python3-pip` and `python3-venv` but `multistage` does not.
+  ```
+  make build_singlestage
+  make build_multistage
+  ```
+- Inspect image sizes.
+  ```
+  docker image ls | grep -P "(singlestage|multistage)"
+  # multistage              latest    93beca777a40   6 minutes ago    652MB
+  # singlestage             latest    74ee2ddf3338   30 minutes ago   1.17GB
+  ```
 
 # Managing images
 - List all images

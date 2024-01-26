@@ -40,6 +40,18 @@ build_subdir:
 run_subdir:
 	@docker run --name subdir --rm subdir
 
+build_singlestage:
+	@docker build --tag singlestage --file "./multistage/Dockerfile" "./multistage"
+
+run_singlestage:
+	@docker run --tty --interactive --name singlestage --rm singlestage
+
+build_multistage:
+	@docker build --tag multistage --file "./multistage/Dockerfile_multistage" "./multistage"
+
+run_multistage:
+	@docker run --tty --interactive --name multistage --rm multistage
+
 
 
 # Cleaning up
@@ -53,3 +65,7 @@ clean_containers:
 
 clean_volumes:
 	@docker volume prune --force
+
+clean_images:
+	@docker image rm $$(docker image ls | grep "<none>" | awk -F ' ' '{print $$3}') && \
+	docker image rm $$(docker image ls | grep -P "(todo-app|dev|subdir|node|docker\/getting-started|singlestage|multistage)" | awk -F ' ' '{print $$3}')
